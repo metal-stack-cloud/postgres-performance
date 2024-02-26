@@ -1,0 +1,31 @@
+apiVersion: cpo.opensource.cybertec.at/v1
+kind: postgresql
+metadata:
+  name: cluster-1
+  namespace: cpo
+spec:
+  dockerImage: docker.io/cybertecpostgresql/cybertec-pg-container:postgres-root-15.2-6
+  numberOfInstances: 1
+  patroni:
+    pg_hba:
+    - local   all             all                                   trust
+    - host all all 0.0.0.0/0 md5
+    - hostssl all all 0.0.0.0/0 md5
+  postgresql:
+    parameters:
+      effective_cache_size: 12288MB
+      max_wal_size: 16GB
+      shared_buffers: 4096MB
+      shared_preload_libraries: pg_stat_statements
+    version: "15"
+  resources:
+    limits:
+      cpu: 24000m
+      memory: 16384Mi
+    requests:
+      cpu: 24000m
+      memory: 16384Mi
+  teamId: acid
+  volume:
+    size: 50Gi
+    storageClass: premium-rwo
